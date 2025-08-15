@@ -12,11 +12,14 @@ export default function Home() {
         </Text>
         <Text>
           I’m currently pursuing a B.Comp in Computer Science at the National
-          University of Singapore. I started from building web apps, but over
-          time I got more interested in what happens under the hood, the kind of
-          programming that deals with how things actually work. These days I’m
-          exploring systems programming with C++, working on side projects that
-          push me to write faster, cleaner, and more reliable code.
+          University of Singapore.
+        </Text>
+        <Text>
+          I started from building web apps, but over time I got more interested
+          in what happens under the hood, the kind of programming that deals
+          with how things actually work. These days I’m exploring systems
+          programming with C++, working on side projects that push me to write
+          faster, cleaner, and more reliable code.
         </Text>
         <Text>
           Outside of code, I love finding new shows to watch and picking up a

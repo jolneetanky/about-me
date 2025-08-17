@@ -36,7 +36,7 @@
 // Import styles of packages that you've installed.
 // All packages except `@mantine/hooks` require styles imports
 import "@mantine/core/styles.css";
-import "./globals.css";
+// import "./globals.css";
 import { Roboto_Mono } from "next/font/google";
 import { Group, Anchor, Container, Box, Center } from "@mantine/core";
 

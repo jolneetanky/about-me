@@ -1,23 +1,10 @@
 import Markdown from "markdown-to-jsx";
-import {
-  getFileNameFromSlug,
-  getObsidianFolderPath,
-  getTitleFromFileName,
-} from "../utils";
-import fs from "fs";
 
 import { createClient } from "@/utils/supabase/server";
 import { cookies } from "next/headers";
 
 type Props = {
-  params: {
-    slug: string;
-  };
-};
-
-type Post = {
-  title: string;
-  content: string;
+  params: Promise<{ slug: string }>;
 };
 
 const getSupabasePublicUrl = (bucketName: string, itemName: string) => {
@@ -40,7 +27,7 @@ const parseContent = (content: string) => {
   const regexes = [obsidianImgRegex, markdownRe];
 
   let replaced = "";
-  for (const reg of regexes) {
+  for (const _ of regexes) {
     replaced = content.replace(obsidianImgRegex, (_, fileName) => {
       const publicUrl = getSupabasePublicUrl("images", fileName);
       return `![image](${publicUrl})`;
@@ -50,46 +37,13 @@ const parseContent = (content: string) => {
   return replaced;
 };
 
-// const parseObsidianToMD = (content: string): string => {
-//   // Find text in double brackets
-//   const linkRegex = /\[\[([^\]]+)\]\]/g;
-//   const imageRegex = /!\[\[([^\]]+)\]\]/g;
-
-//   // Replace double brackets with single bracket links
-//   const replacedImagesText = content.replace(
-//     imageRegex,
-//     "![](/attachments/$1)"
-//   );
-//   const replacedLinksText = replacedImagesText.replace(linkRegex, "[$1]($1)");
-
-//   return replacedLinksText;
-// };
-
-// const getPostContent = (fname: string): string => {
-//   const fullPath = getObsidianFolderPath() + "/" + fname;
-//   const content = fs.readFileSync(fullPath, "utf-8");
-//   const mdContent = parseObsidianToMD(content);
-
-//   return mdContent;
-// };
-
-// const getPost = (slug: string): Post => {
-//   // for content, we need to parse the file
-//   const fname = getFileNameFromSlug(slug);
-//   const content = getPostContent(fname);
-
-//   return {
-//     title: getTitleFromFileName(fname),
-//     content: content,
-//   };
-// };
-
 const Page = async ({ params }: Props) => {
   const cookieStore = await cookies();
   const supabase = await createClient(cookieStore);
-  const { slug } = params;
+  const { slug } = await params;
   const title = decodeURIComponent(slug);
 
+  // Get supabase public URL for the post, and fetch
   const postUrl = await supabase.storage.from("content").getPublicUrl(title)
     .data.publicUrl;
   const res = await fetch(postUrl);

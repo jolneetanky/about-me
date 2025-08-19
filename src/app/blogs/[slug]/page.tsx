@@ -7,16 +7,6 @@ type Props = {
   params: Promise<{ slug: string }>;
 };
 
-const getSupabasePublicUrl = (bucketName: string, itemName: string) => {
-  return (
-    process.env.NEXT_PUBLIC_SUPABASE_URL +
-    "/storage/v1/object/public/" +
-    bucketName +
-    "/" +
-    itemName
-  );
-};
-
 /**
  * Replaces image links with the public image URL.
  */
@@ -29,7 +19,8 @@ const parseContent = (content: string) => {
   let replaced = "";
   for (const _ of regexes) {
     replaced = content.replace(obsidianImgRegex, (_, fileName) => {
-      const publicUrl = getSupabasePublicUrl("images", fileName);
+      const publicUrl =
+        process.env.NEXT_PUBLIC_SUPABASE_IMAGE_BUCKET + "/" + fileName;
       return `![image](${publicUrl})`;
     });
   }

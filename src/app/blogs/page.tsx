@@ -8,7 +8,8 @@ const Page = async () => {
   const cookieStore = await cookies();
   const supabase = await createClient(cookieStore);
 
-  const { data: posts } = await supabase.storage.from("content").list();
+  const { data } = await supabase.storage.from("content").list();
+  const posts = data?.filter((post) => post.name.endsWith("md"));
 
   return (
     <Center>

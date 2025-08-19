@@ -19,8 +19,9 @@ const parseContent = (content: string) => {
   let replaced = "";
   for (const _ of regexes) {
     replaced = content.replace(obsidianImgRegex, (_, fileName) => {
-      const publicUrl =
-        process.env.NEXT_PUBLIC_SUPABASE_IMAGE_BUCKET + "/" + fileName;
+      const publicUrl = encodeURI(
+        process.env.NEXT_PUBLIC_SUPABASE_IMAGE_BUCKET + "/" + fileName
+      );
       return `![image](${publicUrl})`;
     });
   }

@@ -1,7 +1,7 @@
 import { Center } from "@mantine/core";
 
 const Page = () => {
-  return <Center>In Progress</Center>;
+  return <Center>This page is in progress!</Center>;
 };
 
 export default Page;

@@ -27,7 +27,7 @@ export default function Home() {
         {/* Social icons below text */}
         <Group gap="md" mt="sm">
           <Anchor
-            href="https://github.com/yourusername"
+            href="https://github.com/jolneetanky"
             target="_blank"
             rel="noopener noreferrer"
           >
@@ -37,7 +37,7 @@ export default function Home() {
           </Anchor>
 
           <Anchor
-            href="https://linkedin.com/in/yourusername"
+            href="https://linkedin.com/in/jolenetanky"
             target="_blank"
             rel="noopener noreferrer"
           >

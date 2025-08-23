@@ -1,7 +1,7 @@
 import ReactMarkdown from "react-markdown";
 import { createClient } from "@/utils/supabase/server";
 import { cookies } from "next/headers";
-import { Center } from "@mantine/core";
+import { Box, Center } from "@mantine/core";
 
 type Props = {
   params: Promise<{ slug: string }>;
@@ -43,7 +43,7 @@ const Page = async ({ params }: Props) => {
   const parsedContent = parseContent(content);
 
   return (
-    <Center mx={8}>
+    <Box style={{ height: "100%", width: "100%" }} mx={8}>
       <div>
         <h1>{title}</h1>
         <ReactMarkdown
@@ -64,12 +64,27 @@ const Page = async ({ params }: Props) => {
             p: ({ node, ...props }) => (
               <p style={{ margin: "1rem 0" }} {...props} />
             ),
+            code: ({ node, className, children, ...props }) => (
+              <code
+                style={{
+                  background: "#514a4aff", // light gray background
+                  color: "white",
+                  borderRadius: "4px",
+                  overflowX: "auto",
+                  fontSize: "0.9em",
+                  fontFamily: "monospace",
+                }}
+                {...props}
+              >
+                {children}
+              </code>
+            ),
           }}
         >
           {parsedContent}
         </ReactMarkdown>
       </div>
-    </Center>
+    </Box>
   );
 };
 

@@ -82,8 +82,9 @@ const ProjectCard = ({ project }: { project: Project }): JSX.Element => {
         </Box>
       )}
 
-      {/* Title + GitHub */}
+      {/* Title + Status + GitHub */}
       <Group justify="space-between" mb="xs" align="center">
+        {/* Title + Status */}
         <Group align="center" gap="sm">
           <Text fw={600} size="xl">
             {project.title}

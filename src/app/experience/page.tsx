@@ -3,7 +3,7 @@ import { Center } from "@mantine/core";
 
 const Page = () => {
   const Experience = () => {
-    return <>Experience</>;
+    return <>This section is in progress :-)</>;
   };
 
   return (

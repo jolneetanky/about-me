@@ -62,7 +62,7 @@ const PageLayout = ({
 }) => {
   return (
     <Center style={{ height: "100%", width: "100%" }}>
-      <Stack h="100%" w="100%" px="md" py="md">
+      <Stack h="100%" w="100%" py="md">
         <TitleText title={title} subheader={subheader} />
         <Box mt={-2}>{content}</Box>
       </Stack>

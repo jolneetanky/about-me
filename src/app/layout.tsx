@@ -58,6 +58,7 @@ export default function RootLayout({
               justifyContent: "center",
               alignItems: "center",
             }}
+            mx="md"
           >
             {/* <Container size="md" style={{ height: "100%", display: "flex" }}> */}
             {children}

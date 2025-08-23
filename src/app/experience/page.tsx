@@ -1,5 +1,4 @@
 import PageLayout from "@/layouts/PageLayout";
-import { Center } from "@mantine/core";
 
 const Page = () => {
   const Experience = () => {

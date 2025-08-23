@@ -1,7 +1,7 @@
 import ReactMarkdown from "react-markdown";
 import { createClient } from "@/utils/supabase/server";
 import { cookies } from "next/headers";
-import { Box, Center } from "@mantine/core";
+import { Box } from "@mantine/core";
 
 type Props = {
   params: Promise<{ slug: string }>;

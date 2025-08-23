@@ -3,6 +3,7 @@ import Link from "next/link";
 
 import { createClient } from "@/utils/supabase/server";
 import { cookies } from "next/headers";
+import PageLayout from "@/layouts/PageLayout";
 
 const Page = async () => {
   const cookieStore = await cookies();
@@ -11,8 +12,8 @@ const Page = async () => {
   const { data } = await supabase.storage.from("content").list();
   const posts = data?.filter((post) => post.name.endsWith("md"));
 
-  return (
-    <Center>
+  const Posts = () => {
+    return (
       <Stack>
         {posts?.map((post, idx) => (
           <Link href={`/blogs/${post.name}`} key={idx}>
@@ -20,7 +21,15 @@ const Page = async () => {
           </Link>
         ))}
       </Stack>
-    </Center>
+    );
+  };
+
+  return (
+    <PageLayout
+      title="Blogs"
+      subheader="Sometimes I write about the stuff I learned."
+      content={<Posts />}
+    />
   );
 };
 

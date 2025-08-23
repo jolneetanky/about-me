@@ -1,7 +1,17 @@
-import { Center } from "@mantine/core";
+import PageLayout from "@/layouts/PageLayout";
 
 const Page = () => {
-  return <Center>This page is in progress!</Center>;
+  const Experience = () => {
+    return <>This section is in progress :-)</>;
+  };
+
+  return (
+    <PageLayout
+      title="Experience"
+      subheader="A timeline of my work experiences."
+      content={<Experience />}
+    />
+  );
 };
 
 export default Page;

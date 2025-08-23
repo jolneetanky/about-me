@@ -1,7 +1,7 @@
 import "@mantine/core/styles.css";
 import "./globals.css";
 import { Roboto_Mono } from "next/font/google";
-import { Group, Anchor, Container, Box } from "@mantine/core";
+import { Group, Anchor, Container, Box, createTheme } from "@mantine/core";
 
 import {
   ColorSchemeScript,
@@ -17,6 +17,14 @@ export const metadata = {
 
 const robotoMono = Roboto_Mono({
   subsets: ["latin"],
+});
+
+const theme = createTheme({
+  fontFamily: '"Roboto Mono", sans-serif', // Set default font family
+  fontFamilyMonospace: '"Roboto Mono", monospace', // Set monospace font family
+  headings: {
+    fontFamily: '"Roboto Mono", ${DEFAULT_THEME.fontFamily}', // Optionally set heading font
+  },
 });
 
 export default function RootLayout({
@@ -38,7 +46,7 @@ export default function RootLayout({
           flexDirection: "column",
         }}
       >
-        <MantineProvider>
+        <MantineProvider theme={theme}>
           {/* Navbar stays at the top */}
           <Navbar />
 
@@ -51,7 +59,9 @@ export default function RootLayout({
               alignItems: "center",
             }}
           >
-            <Container size="md">{children}</Container>
+            {/* <Container size="md" style={{ height: "100%", display: "flex" }}> */}
+            {children}
+            {/* </Container> */}
           </Box>
         </MantineProvider>
       </body>

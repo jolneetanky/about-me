@@ -1,4 +1,4 @@
-import { Anchor, Box, Container, Group } from "@mantine/core";
+import { Anchor, Box, Container, Group, Image } from "@mantine/core";
 
 const NavbarStyle = {
   background: "#31087B",
@@ -29,19 +29,32 @@ export const Navbar = () => {
   return (
     <Box style={NavbarStyle}>
       <Container size="md" py="md">
-        <Group justify="space-between" px={50}>
-          {navbarItems.map((item, idx) => (
-            <Anchor
-              href={item.href}
-              size="lg"
-              underline="never"
-              c="white"
-              className="navbar-link"
-              key={idx}
-            >
-              {item.title}
-            </Anchor>
-          ))}
+        <Group justify="space-between" align="center" px={50}>
+          {/* Left side: your image */}
+          <Box>
+            <img
+              src="/jolene_image.jpeg" // keep file in /public/jolene_image.jpeg
+              alt="My Logo"
+              style={{ height: 40, width: "auto", display: "block" }}
+            />
+          </Box>
+          {/* Right side: your links */}
+          <Group gap="lg">
+            {navbarItems.map((item, idx) => (
+              <Anchor
+                href={item.href}
+                size="lg"
+                underline="never"
+                c="white"
+                className="navbar-link"
+                key={idx}
+              >
+                {item.title}
+              </Anchor>
+            ))}
+          </Group>
+          {/* Right: placeholder for balance (optional) */}
+          <Box style={{ width: 40 }} /> {/* keeps center truly centered */}
         </Group>
       </Container>
     </Box>

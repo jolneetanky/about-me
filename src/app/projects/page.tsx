@@ -1,3 +1,5 @@
+import "./projects.css";
+
 import PageLayout from "@/layouts/PageLayout";
 import { cookies } from "next/headers";
 import { createClient } from "@/utils/supabase/server";
@@ -15,14 +17,12 @@ import {
 import Markdown from "react-markdown";
 import { IconBrandGithub } from "@tabler/icons-react";
 
-import "./projects.css";
-
 // pulls projects from Supabase and displays them
-type ProjectStatus = "wip" | "refining" | "done" | "closed";
+type ProjectStatus = "wip" | "done" | "needs_refining" | "refining" | "closed";
 
 type Project = {
   title: string;
-  status: "wip" | "refining" | "done" | "closed";
+  status: ProjectStatus;
   imageLink?: string; // image link
   description?: string;
   githubLink: string; // github link
@@ -32,20 +32,29 @@ const statusProps: Record<
   ProjectStatus,
   { label: string; color: string; tooltip: string }
 > = {
-  wip: { label: "WIP", color: "yellow", tooltip: "Actively being worked on" },
+  wip: {
+    label: "WIP",
+    color: "rgba(148, 91, 16, 1)",
+    tooltip: "Actively being worked on",
+  },
+  needs_refining: {
+    label: "Needs refining",
+    color: "rgba(148, 91, 16, 1)",
+    tooltip: "Needs refining",
+  },
   refining: {
     label: "Refining",
-    color: "blue",
+    color: "rgba(59, 100, 184, 1)",
     tooltip: "Polishing / iterating",
   },
   done: {
     label: "Done",
-    color: "green",
+    color: "rgba(26, 105, 10, 1)",
     tooltip: "Finished, may evolve later",
   },
   closed: {
     label: "Closed",
-    color: "gray",
+    color: "rgba(87, 87, 89, 1)",
     tooltip: "Finalized; no further changes",
   },
 };
@@ -57,7 +66,14 @@ const ProjectCard = ({ project }: { project: Project }): JSX.Element => {
   const sp = statusProps[project.status];
 
   return (
-    <Card withBorder radius="lg" shadow="sm" p="md" h={360}>
+    <Card
+      withBorder
+      radius="lg"
+      shadow="sm"
+      p="md"
+      h={360}
+      className="project-card"
+    >
       {/* Top banner image */}
       {project.imageLink && (
         <Box
@@ -89,13 +105,16 @@ const ProjectCard = ({ project }: { project: Project }): JSX.Element => {
           <Text fw={600} size="xl">
             {project.title}
           </Text>
-          <Badge color={sp.color} variant="light" radius="sm" tt="uppercase">
+          <Badge
+            color={sp.color}
+            variant="light"
+            radius="sm"
+            tt="uppercase"
+            className={project.status}
+          >
             {sp.label}
           </Badge>
         </Group>
-        {/* <Text fw={600} size="xl">
-          {project.title}
-        </Text> */}
         <ActionIcon
           component="a"
           href={project.githubLink}
@@ -103,6 +122,7 @@ const ProjectCard = ({ project }: { project: Project }): JSX.Element => {
           rel="noopener noreferrer"
           variant="subtle"
           aria-label="GitHub"
+          className="project-card-icon"
         >
           <IconBrandGithub size={22} />
         </ActionIcon>
@@ -115,7 +135,6 @@ const ProjectCard = ({ project }: { project: Project }): JSX.Element => {
           // leave space below the banner; the rest of the card can scroll if long
           height: project.imageLink ? height - bannerHeight - 72 : height - 56,
         }}
-        // mt={-20}
       >
         {project.description ? (
           <div className="md-desc">
@@ -147,7 +166,8 @@ const Page = async (): Promise<JSX.Element> => {
 
   const { data: supabaseProjects, error } = await supabase
     .from("projects")
-    .select();
+    .select()
+    .order("created_at", { ascending: false });
 
   const projects: Project[] =
     supabaseProjects?.map((project) => ({
@@ -162,7 +182,7 @@ const Page = async (): Promise<JSX.Element> => {
     <PageLayout
       content={<Projects projects={projects} />}
       title="Projects"
-      subheader="A list of projects I worked on that I'm proud of. See more on my GitHub."
+      subheader="A list of projects I had fun building. See more on my GitHub."
     />
   );
 };

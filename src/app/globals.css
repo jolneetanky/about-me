@@ -1,10 +1,11 @@
 /* @import "tailwindcss";
 @plugin "@tailwindcss/typography"; */
 
-/* :root {
-  --background: #ffffff;
-  --foreground: #171717;
-} */
+:root {
+  /* --background: #ffffff;
+  --foreground: #171717; */
+  --yellow: rgb(233, 206, 69);
+}
 
 /* @theme inline {
   --color-background: var(--background);
@@ -43,13 +44,13 @@ body {
   bottom: -2px;
   width: 0;
   height: 2px;
-  background: #ffe066;
+  background: var(--yellow);
   transition: width 0.3s;
 }
 
 .navbar-link:hover,
 .navbar-link:focus {
-  color: #ffe066;
+  color: var(--yellow);
 }
 
 .navbar-link:hover::after,

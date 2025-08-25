@@ -1,3 +1,13 @@
 .md-desc > *:first-child {
   margin-top: 0 !important;
 }
+
+/* 233, 206, 69 */
+.project-card {
+  background-color: var(--yellow);
+  color: #000;
+}
+
+.project-card-icon {
+  color: rgba(59, 100, 184, 1);
+}

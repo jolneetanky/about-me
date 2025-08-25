@@ -7,7 +7,7 @@ const supabaseKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
 
 export const createClient = async (
   cookieStore: Awaited<ReturnType<typeof cookies>>
-) => {
+): Promise<ReturnType<typeof createServerClient<Database>>> => {
   return createServerClient<Database>(supabaseUrl!, supabaseKey!, {
     cookies: {
       getAll() {

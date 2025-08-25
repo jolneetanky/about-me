@@ -32,11 +32,18 @@ export const Navbar = () => {
         <Group justify="space-between" align="center" px={50}>
           {/* Left side: your image */}
           <Box>
-            <img
+            <Image
+              src="/jolene_image.jpeg"
+              alt="My Logo"
+              height={40}
+              display="block"
+              style={{ borderRadius: "50%" }}
+            />
+            {/* <img
               src="/jolene_image.jpeg" // keep file in /public/jolene_image.jpeg
               alt="My Logo"
               style={{ height: 40, width: "auto", display: "block" }}
-            />
+            /> */}
           </Box>
           {/* Right side: your links */}
           <Group gap="lg">

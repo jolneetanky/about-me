@@ -17,7 +17,9 @@ const Page = async () => {
       <Stack>
         {posts?.map((post, idx) => (
           <Link href={`/blogs/${post.name}`} key={idx}>
-            {post.name}
+            {post.name.endsWith(".md")
+              ? post.name.substring(0, post.name.length - 3)
+              : post.name}
           </Link>
         ))}
       </Stack>

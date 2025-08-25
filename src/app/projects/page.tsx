@@ -4,7 +4,6 @@ import PageLayout from "@/layouts/PageLayout";
 import { cookies } from "next/headers";
 import { createClient } from "@/utils/supabase/server";
 import React, { JSX } from "react";
-import Image from "next/image";
 import {
   ActionIcon,
   Badge,
@@ -16,6 +15,7 @@ import {
 } from "@mantine/core";
 import Markdown from "react-markdown";
 import { IconBrandGithub } from "@tabler/icons-react";
+import Image from "next/image";
 
 // pulls projects from Supabase and displays them
 type ProjectStatus = "wip" | "done" | "needs_refining" | "refining" | "closed";
@@ -182,7 +182,7 @@ const Page = async (): Promise<JSX.Element> => {
     <PageLayout
       content={<Projects projects={projects} />}
       title="Projects"
-      subheader="A list of projects I had fun building. See more on my GitHub."
+      subheader="A list of projects I enjoyed building. See more on my GitHub."
     />
   );
 };

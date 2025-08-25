@@ -34,6 +34,11 @@ const Page = async ({ params }: Props) => {
   const { slug } = await params;
   const title = decodeURIComponent(slug);
 
+  let displayTitle = "";
+  if (title.endsWith(".md")) {
+    displayTitle = title.slice(0, title.length - 3);
+  }
+
   // Get supabase public URL for the post, and fetch
   const postUrl = supabase.storage.from("content").getPublicUrl(title)
     .data.publicUrl;
@@ -45,7 +50,7 @@ const Page = async ({ params }: Props) => {
   return (
     <Box style={{ height: "100%", width: "100%" }} mx={8}>
       <div>
-        <h1>{title}</h1>
+        <h1>{displayTitle}</h1>
         <ReactMarkdown
           components={{
             img: ({ node, ...props }) => (

@@ -11,8 +11,7 @@ import {
 import { Navbar } from "./components/Navbar";
 
 export const metadata = {
-  title: "My Mantine app",
-  description: "I have followed setup instructions carefully",
+  title: "jolenetan.dev",
 };
 
 const robotoMono = Roboto_Mono({

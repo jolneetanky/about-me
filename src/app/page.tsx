@@ -14,7 +14,7 @@ export default function Home() {
         </Text>
         <Text>
           I love building things and seeing how I can make different ideas come
-          to life through code. I love learning new things and deepening my
+          to life through code. I enjoy learning new things and deepening my
           technical knowledge. These days I&apos;m learning C++ and building
           systems projects.
         </Text>

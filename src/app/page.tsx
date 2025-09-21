@@ -13,14 +13,13 @@ export default function Home() {
           University of Singapore.
         </Text>
         <Text>
-          I started from building web apps, but over time I got more interested
-          in what happens under the hood, the kind of programming that deals
-          with how things actually work. These days I’m exploring systems
-          programming with C++, and working on related side projects.
+          I love building things and seeing how I can make different ideas come
+          to life through code. I love learning new things and deepening my
+          technical knowledge. These days I'm learning C++ and building systems
+          projects.
         </Text>
         <Text>
-          Outside of code, I also love picking up a good book every now and
-          then!
+          Outside of code, I also love picking up a good book every now and then
         </Text>
 
         {/* Icons */}

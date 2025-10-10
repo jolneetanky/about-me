@@ -8,7 +8,8 @@ type Props = {
 };
 
 /**
- * Replaces image links with the public image URL.
+ * Parse ObsidianMD to MD.
+ * 1) Replaces image links with the public image URL.
  */
 const parseContent = (content: string) => {
   const obsidianImgRegex = /!\[\[(.*?)\]\]/g;
@@ -28,6 +29,8 @@ const parseContent = (content: string) => {
   return replaced;
 };
 
+// TODO: make code block display nice
+// is Obsidian code block aligned with md code block? Do I need my own thingy lol
 const Page = async ({ params }: Props) => {
   const cookieStore = await cookies();
   const supabase = await createClient(cookieStore);

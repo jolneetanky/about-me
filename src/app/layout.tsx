@@ -1,7 +1,7 @@
 import "@mantine/core/styles.css";
 import "./globals.css";
 import { Roboto_Mono } from "next/font/google";
-import { Group, Anchor, Container, Box, createTheme } from "@mantine/core";
+import { Box, createTheme } from "@mantine/core";
 
 import {
   ColorSchemeScript,

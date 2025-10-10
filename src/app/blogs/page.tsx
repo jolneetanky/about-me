@@ -1,5 +1,4 @@
-import { Center, Stack } from "@mantine/core";
-import Link from "next/link";
+import { Anchor, Stack } from "@mantine/core";
 
 import { createClient } from "@/utils/supabase/server";
 import { cookies } from "next/headers";
@@ -14,13 +13,19 @@ const Page = async () => {
 
   const Posts = () => {
     return (
-      <Stack>
+      // align-items: "flex-start" => each child's width becomes as wide as its content
+      <Stack align="flex-start">
         {posts?.map((post, idx) => (
-          <Link href={`/blogs/${post.name}`} key={idx}>
+          <Anchor
+            href={`/blogs/${post.name}`}
+            underline="never"
+            key={idx}
+            className="link"
+          >
             {post.name.endsWith(".md")
               ? post.name.substring(0, post.name.length - 3)
               : post.name}
-          </Link>
+          </Anchor>
         ))}
       </Stack>
     );

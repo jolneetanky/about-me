@@ -1,10 +1,13 @@
 /* @import "tailwindcss";
 @plugin "@tailwindcss/typography"; */
 
+/* JUST DEFINE ANY CLASS IN HERE AND USE THE STYLE IN ANY MANTINE COMPONENT */
+
 :root {
   /* --background: #ffffff;
   --foreground: #171717; */
   --yellow: rgb(233, 206, 69);
+  --yellow-dark: rgb(228, 199, 34);
 }
 
 /* @theme inline {
@@ -63,4 +66,35 @@ body {
   background: rgba(191, 185, 185, 0.18);
   padding: 0.1rem 0.3rem;
   border-radius: 4px;
+}
+
+/* Blog link style */
+.link {
+  position: relative;
+  display: inline-block; /* shrink-wrap text content */
+  color: #fff;
+  text-decoration: none;
+  transition: color 0.3s ease;
+}
+
+.link::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  bottom: -2px;
+  width: 0;
+  height: 1px;
+  background: var(--yellow-dark);
+  transition: width 0.3s ease;
+}
+
+.link:hover,
+.link:focus {
+  color: var(--yellow-dark);
+  font-weight: bold;
+}
+
+.link:hover::after,
+.link:focus::after {
+  width: 100%;
 }

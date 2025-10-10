@@ -15,7 +15,6 @@ import {
 } from "@mantine/core";
 import Markdown from "react-markdown";
 import { IconBrandGithub } from "@tabler/icons-react";
-import Image from "next/image";
 
 // pulls projects from Supabase and displays them
 type ProjectStatus = "wip" | "done" | "needs_refining" | "refining" | "closed";
@@ -178,7 +177,9 @@ const Page = async (): Promise<JSX.Element> => {
       status: project.status,
     })) ?? [];
 
-  return (
+  return error ? (
+    <div>Error fetching projects</div>
+  ) : (
     <PageLayout
       content={<Projects projects={projects} />}
       title="Projects"

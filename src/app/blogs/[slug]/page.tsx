@@ -1,4 +1,6 @@
 import ReactMarkdown from "react-markdown";
+import type { Components } from "react-markdown";
+// import type { CodeComponent } from "react-markdown/lib/ast-to-react";
 import { createClient } from "@/utils/supabase/server";
 import { cookies } from "next/headers";
 import { Box } from "@mantine/core";
@@ -56,6 +58,45 @@ const Page = async ({ params }: Props) => {
 
   const parsedContent = parseContent(content);
 
+  // code component for React MD
+  const codeComponent = ({
+    inline,
+    className,
+    children,
+    style, // destructure to omit
+    ...props
+  }: React.HTMLAttributes<HTMLElement> & {
+    inline?: boolean;
+  }) => {
+    const match = /language-(\w+)/.exec(className || "");
+
+    return !inline && match ? (
+      <SyntaxHighlighter
+        style={dracula}
+        PreTag="div"
+        language={match[1]}
+        {...props}
+      >
+        {String(children).replace(/\n$/, "")}
+      </SyntaxHighlighter>
+    ) : (
+      // if no language specified (eg. for inline code), fallback to a simple code block
+      <code
+        className={className}
+        {...props}
+        style={{
+          background: "rgba(243, 239, 239, 0.18)",
+          padding: "0.15rem 0.4rem",
+          borderRadius: "4px",
+          fontFamily: "monospace",
+          fontSize: "0.9em",
+        }}
+      >
+        {children}
+      </code>
+    );
+  };
+
   return (
     <Box style={{ height: "100%", width: "100%" }} mx={8}>
       <div>
@@ -80,50 +121,7 @@ const Page = async ({ params }: Props) => {
             p: ({ node, ...props }) => (
               <p style={{ margin: "1rem 0" }} {...props} />
             ),
-            code({ node, inline, className, children, ...props }: any) {
-              const match = /language-(\w+)/.exec(className || "");
-
-              return !inline && match ? (
-                <SyntaxHighlighter
-                  style={dracula}
-                  PreTag="div"
-                  language={match[1]}
-                  {...props}
-                >
-                  {String(children).replace(/\n$/, "")}
-                </SyntaxHighlighter>
-              ) : (
-                // if no language specified (eg. for inline code), fallback to a simple code block
-                <code
-                  className={className}
-                  {...props}
-                  style={{
-                    background: "rgba(243, 239, 239, 0.18)",
-                    padding: "0.15rem 0.4rem",
-                    borderRadius: "4px",
-                    fontFamily: "monospace",
-                    fontSize: "0.9em",
-                  }}
-                >
-                  {children}
-                </code>
-              );
-            },
-            // code: ({ node, className, children, ...props }) => (
-            //   <code
-            //     style={{
-            //       background: "#514a4aff", // light gray background
-            //       color: "white",
-            //       borderRadius: "4px",
-            //       overflowX: "auto",
-            //       fontSize: "0.9em",
-            //       fontFamily: "monospace",
-            //     }}
-            //     {...props}
-            //   >
-            //     {children}
-            //   </code>
-            // ),
+            code: codeComponent,
           }}
         >
           {parsedContent}

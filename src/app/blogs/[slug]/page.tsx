@@ -93,7 +93,18 @@ const Page = async ({ params }: Props) => {
                   {String(children).replace(/\n$/, "")}
                 </SyntaxHighlighter>
               ) : (
-                <code className={className} {...props}>
+                // if no language specified (eg. for inline code), fallback to a simple code block
+                <code
+                  className={className}
+                  {...props}
+                  style={{
+                    background: "rgba(243, 239, 239, 0.18)",
+                    padding: "0.15rem 0.4rem",
+                    borderRadius: "4px",
+                    fontFamily: "monospace",
+                    fontSize: "0.9em",
+                  }}
+                >
                   {children}
                 </code>
               );

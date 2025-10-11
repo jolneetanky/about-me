@@ -98,3 +98,23 @@ body {
 .link:focus::after {
   width: 100%;
 }
+
+/* Example CSS for tables */
+/* For MD tables (which React Markdown converts to
+standard HTML <table>, <th>, <td> elements
+*/
+table {
+  border-collapse: collapse;
+  width: 100%;
+}
+
+th,
+td {
+  border: 1px solid #ddd;
+  padding: 8px;
+  text-align: left;
+}
+
+th {
+  background-color: rgb(40, 42, 53);
+}

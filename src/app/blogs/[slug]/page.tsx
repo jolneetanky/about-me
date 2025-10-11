@@ -3,11 +3,17 @@ import { createClient } from "@/utils/supabase/server";
 import { cookies } from "next/headers";
 import { Box } from "@mantine/core";
 
+import remarkGfm from "remark-gfm"; // for github flavored MD
+import rehypeRaw from "rehype-raw"; // for formatting code?
+import { Prism as SyntaxHighlighter } from "react-syntax-highlighter";
+import { dracula } from "react-syntax-highlighter/dist/esm/styles/prism";
+
 type Props = {
   params: Promise<{ slug: string }>;
 };
 
 /**
+ * TODO: factor this out to our `blogs` repo
  * Parse ObsidianMD to MD.
  * 1) Replaces image links with the public image URL.
  */
@@ -55,6 +61,8 @@ const Page = async ({ params }: Props) => {
       <div>
         <h1>{displayTitle}</h1>
         <ReactMarkdown
+          remarkPlugins={[remarkGfm]}
+          rehypePlugins={[rehypeRaw]}
           components={{
             img: ({ node, ...props }) => (
               <img
@@ -72,21 +80,39 @@ const Page = async ({ params }: Props) => {
             p: ({ node, ...props }) => (
               <p style={{ margin: "1rem 0" }} {...props} />
             ),
-            code: ({ node, className, children, ...props }) => (
-              <code
-                style={{
-                  background: "#514a4aff", // light gray background
-                  color: "white",
-                  borderRadius: "4px",
-                  overflowX: "auto",
-                  fontSize: "0.9em",
-                  fontFamily: "monospace",
-                }}
-                {...props}
-              >
-                {children}
-              </code>
-            ),
+            code({ node, inline, className, children, ...props }: any) {
+              const match = /language-(\w+)/.exec(className || "");
+
+              return !inline && match ? (
+                <SyntaxHighlighter
+                  style={dracula}
+                  PreTag="div"
+                  language={match[1]}
+                  {...props}
+                >
+                  {String(children).replace(/\n$/, "")}
+                </SyntaxHighlighter>
+              ) : (
+                <code className={className} {...props}>
+                  {children}
+                </code>
+              );
+            },
+            // code: ({ node, className, children, ...props }) => (
+            //   <code
+            //     style={{
+            //       background: "#514a4aff", // light gray background
+            //       color: "white",
+            //       borderRadius: "4px",
+            //       overflowX: "auto",
+            //       fontSize: "0.9em",
+            //       fontFamily: "monospace",
+            //     }}
+            //     {...props}
+            //   >
+            //     {children}
+            //   </code>
+            // ),
           }}
         >
           {parsedContent}

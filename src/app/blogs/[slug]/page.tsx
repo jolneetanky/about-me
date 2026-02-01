@@ -1,62 +1,31 @@
 import ReactMarkdown from "react-markdown";
-import type { Components } from "react-markdown";
-// import type { CodeComponent } from "react-markdown/lib/ast-to-react";
-import { createClient } from "@/utils/supabase/server";
-import { cookies } from "next/headers";
 import { Box } from "@mantine/core";
+import { getPostBySlug, type Post } from "../utils";
 
 import remarkGfm from "remark-gfm"; // for github flavored MD
 import rehypeRaw from "rehype-raw"; // for formatting code?
 import { Prism as SyntaxHighlighter } from "react-syntax-highlighter";
 import { dracula } from "react-syntax-highlighter/dist/esm/styles/prism";
 
+// This page is only responsible for taking in an MD string and rendering it cleanly.
 type Props = {
   params: Promise<{ slug: string }>;
 };
 
-/**
- * TODO: factor this out to our `blogs` repo
- * Parse ObsidianMD to MD.
- * 1) Replaces image links with the public image URL.
- */
-const parseContent = (content: string) => {
-  const obsidianImgRegex = /!\[\[(.*?)\]\]/g;
-  const markdownRe = /!\[([^\]]*)\]\(([^)]+)\)/g;
-  const regexes = [obsidianImgRegex, markdownRe];
-
-  let replaced = "";
-  for (const _ of regexes) {
-    replaced = content.replace(obsidianImgRegex, (_, fileName) => {
-      const publicUrl = encodeURI(
-        process.env.NEXT_PUBLIC_SUPABASE_IMAGE_BUCKET + "/" + fileName
-      );
-      return `![image](${publicUrl})`;
-    });
-  }
-
-  return replaced;
-};
-
-// TODO: make code block display nice
-// is Obsidian code block aligned with md code block? Do I need my own thingy lol
 const Page = async ({ params }: Props) => {
-  const cookieStore = await cookies();
-  const supabase = await createClient(cookieStore);
   const { slug } = await params;
-  const title = decodeURIComponent(slug);
+  
+  // Get the full Post object (no need to recompute reading time, read file, etc.)
+  const post = await getPostBySlug(slug);
 
-  let displayTitle = "";
-  if (title.endsWith(".md")) {
-    displayTitle = title.slice(0, title.length - 3);
+  if (!post) {
+    return <div>Post not found</div>;
   }
 
-  // Get supabase public URL for the post, and fetch
-  const postUrl = supabase.storage.from("content").getPublicUrl(title)
-    .data.publicUrl;
-  const res = await fetch(postUrl);
-  const content = await res.text();
+  // Use the Post object directly - all fields are already computed
+  const { title, content, readingTime, createdAtDate, lastEditedDate } = post;
 
-  const parsedContent = parseContent(content);
+  // const parsedContent = parseContent(content);
 
   // code component for React MD
   const codeComponent = ({
@@ -98,35 +67,84 @@ const Page = async ({ params }: Props) => {
   };
 
   return (
-    <Box style={{ height: "100%", width: "100%" }} mx={8}>
-      <div>
-        <h1>{displayTitle}</h1>
-        <ReactMarkdown
-          remarkPlugins={[remarkGfm]}
-          rehypePlugins={[rehypeRaw]}
-          components={{
-            img: ({ node, ...props }) => (
-              <img
-                {...props}
-                style={{
-                  display: "block",
-                  maxWidth: "100%",
-                  height: "auto",
-                  margin: "1rem 0",
-                }}
-                // optional: ensure it doesn't sit inline with text
-              />
-            ),
-            // Optional: ensure paragraphs don’t collapse with images
-            p: ({ node, ...props }) => (
-              <p style={{ margin: "1rem 0" }} {...props} />
-            ),
-            code: codeComponent,
-          }}
-        >
-          {parsedContent}
-        </ReactMarkdown>
-      </div>
+    <Box style={{ height: "100%", width: "100%" }}>
+      <article className="blog-post">
+        <header className="blog-header">
+          <h1>{title}</h1>
+          {(createdAtDate || readingTime) && (
+            <div className="blog-meta">
+              {createdAtDate && (
+                <span>
+                  <span className="blog-meta-label">Created At:</span>{" "}
+                  <time dateTime={createdAtDate.toISOString()}>
+                    {createdAtDate.toLocaleDateString("en-US", {
+                      year: "numeric",
+                      month: "long",
+                      day: "numeric",
+                    })}
+                  </time>
+                </span>
+              )}
+              {lastEditedDate && (
+                <span>
+                  <span className="blog-meta-label">Last Modified At:</span>{" "}
+                  <time dateTime={lastEditedDate.toISOString()}>
+                    {lastEditedDate.toLocaleDateString("en-US", {
+                      year: "numeric",
+                      month: "long",
+                      day: "numeric",
+                    })}
+                  </time>
+                </span>
+              )}
+              {readingTime > 0 && (
+                <span className="blog-meta-label">{readingTime} min read</span>
+              )}
+            </div>
+          )}
+        </header>
+        <div className="blog-content">
+          <ReactMarkdown
+            remarkPlugins={[remarkGfm]}
+            rehypePlugins={[rehypeRaw]}
+            components={{
+              h1: ({ node, ...props }) => <h1 {...props} />,
+              h2: ({ node, ...props }) => <h2 {...props} />,
+              h3: ({ node, ...props }) => <h3 {...props} />,
+              h4: ({ node, ...props }) => <h4 {...props} />,
+              p: ({ node, ...props }) => <p {...props} />,
+              a: ({ node, ...props }) => <a {...props} />,
+              ul: ({ node, ...props }) => <ul {...props} />,
+              ol: ({ node, ...props }) => <ol {...props} />,
+              li: ({ node, ...props }) => <li {...props} />,
+              blockquote: ({ node, ...props }) => <blockquote {...props} />,
+              hr: ({ node, ...props }) => <hr {...props} />,
+              table: ({ node, ...props }) => <table {...props} />,
+              thead: ({ node, ...props }) => <thead {...props} />,
+              tbody: ({ node, ...props }) => <tbody {...props} />,
+              tr: ({ node, ...props }) => <tr {...props} />,
+              th: ({ node, ...props }) => <th {...props} />,
+              td: ({ node, ...props }) => <td {...props} />,
+              strong: ({ node, ...props }) => <strong {...props} />,
+              em: ({ node, ...props }) => <em {...props} />,
+              img: ({ node, ...props }) => (
+                <img
+                  {...props}
+                  className="blog-image"
+                  style={{
+                    display: "block",
+                    maxWidth: "100%",
+                    height: "auto",
+                  }}
+                />
+              ),
+              code: codeComponent,
+            }}
+          >
+            {content}
+          </ReactMarkdown>
+        </div>
+      </article>
     </Box>
   );
 };

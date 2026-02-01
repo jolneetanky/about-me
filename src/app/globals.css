@@ -1,5 +1,5 @@
-/* @import "tailwindcss";
-@plugin "@tailwindcss/typography"; */
+@import "tailwindcss";
+@plugin "@tailwindcss/typography";
 
 /* JUST DEFINE ANY CLASS IN HERE AND USE THE STYLE IN ANY MANTINE COMPONENT */
 
@@ -99,22 +99,261 @@ body {
   width: 100%;
 }
 
-/* Example CSS for tables */
-/* For MD tables (which React Markdown converts to
-standard HTML <table>, <th>, <td> elements
-*/
-table {
-  border-collapse: collapse;
+/* ============================================
+   BLOG POST STYLING - Clean & Professional
+   ============================================ */
+
+.blog-post {
+  max-width: 800px;
   width: 100%;
+  margin: 0 auto;
+  padding: 2rem 1rem;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+  line-height: 1.7;
+  color: #e5e7eb;
 }
 
-th,
-td {
-  border: 1px solid #ddd;
-  padding: 8px;
+/* Blog Header */
+.blog-header {
+  margin-bottom: 3rem;
+  padding-bottom: 1.5rem;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.blog-header h1 {
+  font-size: 2.5rem;
+  font-weight: 700;
+  line-height: 1.2;
+  margin: 0 0 1rem 0;
+  color: #ffffff;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+  letter-spacing: -0.02em;
+}
+
+.blog-meta {
+  display: flex;
+  gap: 1rem;
+  font-size: 0.9rem;
+  color: #9ca3af;
+  align-items: center;
+}
+
+.blog-meta > * {
+  color: #9ca3af;
+}
+
+.blog-meta-label {
+  font-weight: 500;
+  color: #9ca3af;
+}
+
+/* Add dot before all children except the first one */
+.blog-meta > *:not(:first-child) {
+  position: relative;
+}
+
+.blog-meta > *:not(:first-child)::before {
+  content: "•";
+  position: absolute;
+  left: -0.75rem; /* Half of gap (1rem / 2 = 0.5rem) + small offset */
+  color: #6b7280;
+}
+
+/* Blog Content */
+.blog-content {
+  font-size: 1.125rem;
+  line-height: 1.8;
+  color: #e5e7eb;
+}
+
+/* Headings */
+.blog-content h1,
+.blog-content h2,
+.blog-content h3,
+.blog-content h4,
+.blog-content h5,
+.blog-content h6 {
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+  font-weight: 600;
+  line-height: 1.3;
+  margin-top: 2.5rem;
+  margin-bottom: 1rem;
+  color: #ffffff;
+}
+
+.blog-content h1 {
+  font-size: 2rem;
+  margin-top: 3rem;
+}
+
+.blog-content h2 {
+  font-size: 1.75rem;
+  margin-top: 2.5rem;
+  padding-bottom: 0.5rem;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.blog-content h3 {
+  font-size: 1.5rem;
+}
+
+.blog-content h4 {
+  font-size: 1.25rem;
+}
+
+/* Paragraphs */
+.blog-content p {
+  margin: 1.5rem 0;
+  color: #e5e7eb;
+}
+
+/* Links */
+.blog-content a {
+  color: rgb(233, 206, 69);
+  text-decoration: none;
+  border-bottom: 1px solid rgba(233, 206, 69, 0.3);
+  transition: border-color 0.2s;
+}
+
+.blog-content a:hover {
+  border-bottom-color: rgb(233, 206, 69);
+}
+
+/* Lists */
+.blog-content ul,
+.blog-content ol {
+  margin: 1.5rem 0;
+  padding-left: 2rem;
+}
+
+.blog-content li {
+  margin: 0.75rem 0;
+  color: #e5e7eb;
+}
+
+.blog-content ul li {
+  list-style-type: disc;
+}
+
+.blog-content ol li {
+  list-style-type: decimal;
+}
+
+/* Code blocks */
+.blog-content code {
+  background: rgba(243, 239, 239, 0.15);
+  padding: 0.2rem 0.4rem;
+  border-radius: 4px;
+  font-size: 0.9em;
+  font-family: "SF Mono", Monaco, "Cascadia Code", "Roboto Mono", Consolas, "Courier New", monospace;
+  color: #fbbf24;
+}
+
+.blog-content pre {
+  background: #1a1a1a;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 8px;
+  padding: 1.25rem;
+  overflow-x: auto;
+  margin: 1.5rem 0;
+  font-size: 0.9rem;
+  line-height: 1.6;
+}
+
+.blog-content pre code {
+  background: transparent;
+  padding: 0;
+  color: #e5e7eb;
+  font-size: inherit;
+  border-radius: 0;
+}
+
+/* Images */
+.blog-image {
+  border-radius: 8px;
+  margin: 2rem auto;
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.3);
+  max-width: 100%;
+  height: auto;
+}
+
+/* Blockquotes */
+.blog-content blockquote {
+  border-left: 4px solid rgb(233, 206, 69);
+  padding-left: 1.5rem;
+  margin: 1.5rem 0;
+  color: #d1d5db;
+  font-style: italic;
+  background: rgba(233, 206, 69, 0.05);
+  padding: 1rem 1.5rem;
+  border-radius: 4px;
+}
+
+/* Horizontal rules */
+.blog-content hr {
+  border: none;
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
+  margin: 2.5rem 0;
+}
+
+/* Tables */
+.blog-content table {
+  width: 100%;
+  border-collapse: collapse;
+  margin: 1.5rem 0;
+  font-size: 0.95rem;
+}
+
+.blog-content th,
+.blog-content td {
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  padding: 0.75rem;
   text-align: left;
 }
 
-th {
-  background-color: rgb(40, 42, 53);
+.blog-content th {
+  background: rgba(255, 255, 255, 0.05);
+  font-weight: 600;
+  color: #ffffff;
+}
+
+.blog-content td {
+  color: #e5e7eb;
+}
+
+/* Strong/Emphasis */
+.blog-content strong {
+  font-weight: 600;
+  color: #ffffff;
+}
+
+.blog-content em {
+  font-style: italic;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .blog-post {
+    padding: 1.5rem 1rem;
+  }
+
+  .blog-header h1 {
+    font-size: 2rem;
+  }
+
+  .blog-content {
+    font-size: 1rem;
+  }
+
+  .blog-content h1 {
+    font-size: 1.75rem;
+  }
+
+  .blog-content h2 {
+    font-size: 1.5rem;
+  }
+
+  .blog-content h3 {
+    font-size: 1.25rem;
+  }
 }

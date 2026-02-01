@@ -1,3 +1,4 @@
+// /src/app/blogs/[slug]/page.tsx
 import ReactMarkdown from "react-markdown";
 import { Box } from "@mantine/core";
 import { getPostBySlug, type Post } from "../utils";
@@ -14,7 +15,7 @@ type Props = {
 
 const Page = async ({ params }: Props) => {
   const { slug } = await params;
-  
+
   // Get the full Post object (no need to recompute reading time, read file, etc.)
   const post = await getPostBySlug(slug);
 

@@ -4,7 +4,7 @@
   "private": true,
   "scripts": {
     "dev": "TINA_PUBLIC_IS_LOCAL=true tinacms dev -c \"next dev --turbopack\"",
-    "build": "next build",
+    "build": "tinacms build && next build",
     "start": "next start",
     "lint": "next lint"
   },
@@ -15,9 +15,9 @@
     "@tailwindcss/typography": "^0.5.16",
     "@types/markdown-to-jsx": "^7.0.0",
     "gray-matter": "^4.0.3",
-    "next": "^16.1.6",
-    "react": "^19.2.4",
-    "react-dom": "^19.2.4",
+    "next": "^15.5.4",
+    "react": "19.1.0",
+    "react-dom": "19.1.0",
     "react-markdown": "^10.1.0",
     "tinacms": "^3.3.2"
   },

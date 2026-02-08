@@ -32,7 +32,7 @@ export default defineConfig({
       {
         name: "blogs",
         label: "Blogs",
-        path: "content/blog",
+        path: "content/blog", // tells tina where the documents in this collection are stored. The most minimal setup is just tina running on your server -> tina as a UI to edit collections stored on that server.
         format: "md",
         fields: [
           {

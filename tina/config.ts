@@ -42,22 +42,22 @@ export default defineConfig({
             isTitle: true,
             required: true,
           },
-          {
-            type: "datetime",
-            name: "createdAt",
-            label: "Created At",
-            ui: {
-              dateFormat: "YYYY-MM-DD",
-            },
-          },
-          {
-            type: "datetime",
-            name: "updatedAt",
-            label: "Last Updated",
-            ui: {
-              dateFormat: "YYYY-MM-DD",
-            },
-          },
+          // {
+          //   type: "datetime",
+          //   name: "createdAt",
+          //   label: "Created At",
+          //   ui: {
+          //     dateFormat: "YYYY-MM-DD",
+          //   },
+          // },
+          // {
+          //   type: "datetime",
+          //   name: "updatedAt",
+          //   label: "Last Updated",
+          //   ui: {
+          //     dateFormat: "YYYY-MM-DD",
+          //   },
+          // },
           {
             type: "rich-text",
             name: "body",

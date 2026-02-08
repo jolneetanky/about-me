@@ -2,7 +2,7 @@ import "./projects.css";
 
 import PageLayout from "@/layouts/PageLayout";
 import { cookies } from "next/headers";
-import { createClient } from "@/utils/supabase/server";
+// import { createClient } from "@/utils/supabase/server";
 import React, { JSX } from "react";
 import {
   ActionIcon,
@@ -160,22 +160,25 @@ const Projects = ({ projects }: { projects: Project[] }): JSX.Element => {
 };
 
 const Page = async (): Promise<JSX.Element> => {
-  const cookieStore = await cookies();
-  const supabase = await createClient(cookieStore);
+  // const cookieStore = await cookies();
+  // const supabase = await createClient(cookieStore);
 
-  const { data: supabaseProjects, error } = await supabase
-    .from("projects")
-    .select()
-    .order("created_at", { ascending: false });
+  // const { data: supabaseProjects, error } = await supabase
+  //   .from<projects>("projects")
+  //   .select()
+  //   .order("created_at", { ascending: false });
 
-  const projects: Project[] =
-    supabaseProjects?.map((project) => ({
-      title: project.title,
-      imageLink: project.image_link ?? "",
-      description: project.description ?? "",
-      githubLink: project.github_link,
-      status: project.status,
-    })) ?? [];
+  // const projects: Project[] =
+  //   supabaseProjects?.map((project) => ({
+  //     title: project.title,
+  //     imageLink: project.image_link ?? "",
+  //     description: project.description ?? "",
+  //     githubLink: project.github_link,
+  //     status: project.status,
+  //   })) ?? [];
+
+  const projects: Project[] = [];
+  const error = null;
 
   return error ? (
     <div>Error fetching projects</div>

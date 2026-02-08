@@ -1,5 +1,7 @@
 // /src/app/blogs/[slug]/page.tsx
 import ReactMarkdown from "react-markdown";
+import { TinaMarkdown } from "tinacms/dist/rich-text";
+
 import { Box } from "@mantine/core";
 import { getPostBySlug, type Post } from "../utils";
 
@@ -104,8 +106,65 @@ const Page = async ({ params }: Props) => {
             </div>
           )}
         </header>
+
         <div className="blog-content">
-          <ReactMarkdown
+          <TinaMarkdown
+            content={content}
+            components={{
+              h1: (props) => <h1 {...props} />,
+              h2: (props) => <h2 {...props} />,
+              h3: (props) => <h3 {...props} />,
+              h4: (props) => <h4 {...props} />,
+              p: (props) => <p {...props} />,
+              a: (props) => <a {...props} />,
+              ul: (props) => <ul {...props} />,
+              ol: (props) => <ol {...props} />,
+              li: (props) => <li {...props} />,
+              blockquote: (props) => <blockquote {...props} />,
+              hr: () => <hr />,
+              strong: (props) => <strong {...props} />,
+              em: (props) => <em {...props} />,
+
+              img: ({ url, alt }) => (
+                <img
+                  src={url}
+                  alt={alt ?? ""}
+                  className="blog-image"
+                  style={{
+                    display: "block",
+                    maxWidth: "100%",
+                    height: "auto",
+                  }}
+                />
+              ),
+
+              code_block: ({ value, language }) => (
+                <SyntaxHighlighter
+                  style={dracula}
+                  language={language}
+                  PreTag="div"
+                >
+                  {value}
+                </SyntaxHighlighter>
+              ),
+
+              code: ({ value }) => (
+                <code
+                  style={{
+                    background: "rgba(243, 239, 239, 0.18)",
+                    padding: "0.15rem 0.4rem",
+                    borderRadius: "4px",
+                    fontFamily: "monospace",
+                    fontSize: "0.9em",
+                  }}
+                >
+                  {value}
+                </code>
+              ),
+            }}
+          />
+
+          {/* <ReactMarkdown
             remarkPlugins={[remarkGfm]}
             rehypePlugins={[rehypeRaw]}
             components={{
@@ -143,7 +202,7 @@ const Page = async ({ params }: Props) => {
             }}
           >
             {content}
-          </ReactMarkdown>
+          </ReactMarkdown> */}
         </div>
       </article>
     </Box>

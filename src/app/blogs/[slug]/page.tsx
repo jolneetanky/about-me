@@ -108,7 +108,7 @@ const Page = async ({ params }: Props) => {
         </header>
 
         <div className="blog-content">
-          <TinaMarkdown
+          {/* <TinaMarkdown
             content={content}
             components={{
               h1: (props) => <h1 {...props} />,
@@ -162,9 +162,9 @@ const Page = async ({ params }: Props) => {
                 </code>
               ),
             }}
-          />
+          /> */}
 
-          {/* <ReactMarkdown
+          <ReactMarkdown
             remarkPlugins={[remarkGfm]}
             rehypePlugins={[rehypeRaw]}
             components={{
@@ -202,7 +202,7 @@ const Page = async ({ params }: Props) => {
             }}
           >
             {content}
-          </ReactMarkdown> */}
+          </ReactMarkdown>
         </div>
       </article>
     </Box>

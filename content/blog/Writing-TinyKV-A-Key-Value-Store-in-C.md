@@ -1,5 +1,7 @@
 ---
 title: 'Writing TinyKV: A Key Value Store in C++'
+createdAt: 2026-02-09T17:11:44.647Z
+updatedAt: 2026-02-10T17:11:51.069Z
 ---
 
 **TODO:**

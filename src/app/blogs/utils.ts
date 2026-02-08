@@ -45,72 +45,72 @@ export type Post = {
   createdAtDate: Date;
   lastEditedDate: Date;
   readingTime: number;
-  content: any;
+  content: string;
 };
 
 export async function getPosts(): Promise<Post[]> {
-  const postsList = await client.queries.blogsConnection();
-  const edges = postsList.data.blogsConnection.edges;
+  // const postsList = await client.queries.blogsConnection();
+  // const edges = postsList.data.blogsConnection.edges;
 
-  // flatmap to handle null nodes safely
-  const posts: Post[] =
-    edges?.flatMap((edge) => {
-      const node = edge?.node;
-      if (!node) return [];
+  // // flatmap to handle null nodes safely
+  // const posts: Post[] =
+  //   edges?.flatMap((edge) => {
+  //     const node = edge?.node;
+  //     if (!node) return [];
 
-      return [
-        {
-          title: node.title,
-          slug: node._sys.filename,
-          createdAtDate: node.createdAt
-            ? new Date(node.createdAt)
-            : new Date(0),
-          lastEditedDate: node.updatedAt
-            ? new Date(node.updatedAt)
-            : new Date(0),
-          readingTime: calculateReadingTimeFromBody(node.body),
-          content: node.body ?? "",
-        },
-      ];
-    }) ?? [];
+  //     return [
+  //       {
+  //         title: node.title,
+  //         slug: node._sys.filename,
+  //         createdAtDate: node.createdAt
+  //           ? new Date(node.createdAt)
+  //           : new Date(0),
+  //         lastEditedDate: node.updatedAt
+  //           ? new Date(node.updatedAt)
+  //           : new Date(0),
+  //         readingTime: calculateReadingTimeFromBody(node.body),
+  //         content: node.body ?? "",
+  //       },
+  //     ];
+  //   }) ?? [];
 
   // Read blog files from blogs directory
-  // const blogsDir = join(process.cwd(), "content/blog");
-  // const files = await readdir(blogsDir);
-  // const mdFiles = files.filter((file) => file.endsWith(".md"));
+  const blogsDir = join(process.cwd(), "content/blog");
+  const files = await readdir(blogsDir);
+  const mdFiles = files.filter((file) => file.endsWith(".md"));
 
-  // // Get metadata and content for each post
-  // const posts = await Promise.all(
-  //   mdFiles.map(async (file) => {
-  //     const filePath = join(blogsDir, file);
-  //     const fileContent = await readFile(filePath, "utf-8");
-  //     const { data: frontmatter, content } = matter(fileContent);
+  // Get metadata and content for each post
+  const posts = await Promise.all(
+    mdFiles.map(async (file) => {
+      const filePath = join(blogsDir, file);
+      const fileContent = await readFile(filePath, "utf-8");
+      const { data: frontmatter, content } = matter(fileContent);
 
-  //     // Get file stats for dates
-  //     // const stats = await stat(filePath);
-  //     // const createdAtDate = stats.birthtime;
-  //     // const lastEditedDate = stats.mtime;
-  //     const createdAtDate = new Date(frontmatter.createdAt);
-  //     const lastEditedDate = new Date(frontmatter.updatedAt);
+      // Get file stats for dates
+      // const stats = await stat(filePath);
+      // const createdAtDate = stats.birthtime;
+      // const lastEditedDate = stats.mtime;
+      const createdAtDate = new Date(frontmatter.createdAt);
+      const lastEditedDate = new Date(frontmatter.updatedAt);
 
-  //     console.log("HII", frontmatter);
+      console.log("HII", frontmatter);
 
-  //     // Calculate reading time
-  //     const readingTime = calculateReadingTime(content);
+      // Calculate reading time
+      const readingTime = calculateReadingTime(content);
 
-  //     // Extract title from frontmatter or filename
-  //     const title = frontmatter.title || file.replace(".md", "");
+      // Extract title from frontmatter or filename
+      const title = frontmatter.title || file.replace(".md", "");
 
-  //     return {
-  //       title,
-  //       slug: file, // Use filename as slug for routing
-  //       createdAtDate,
-  //       lastEditedDate,
-  //       readingTime,
-  //       content,
-  //     };
-  //   }),
-  // );
+      return {
+        title,
+        slug: file, // Use filename as slug for routing
+        createdAtDate,
+        lastEditedDate,
+        readingTime,
+        content,
+      };
+    }),
+  );
 
   // Sort by last edited date (newest first)
   return posts.sort((a, b) => {

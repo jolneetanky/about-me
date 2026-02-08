@@ -18,15 +18,15 @@ const TitleText = ({
   subheader?: string;
 }) => {
   return (
-    <Stack>
+    <Stack gap="xs">
       <Title order={2}>{title}</Title>
       {subheader && (
-        <Text c="dimmed" mt={-12}>
+        <Text c="dimmed" mt={-8}>
           {subheader}
         </Text>
       )}
 
-      <Group gap="md" mt={-12}>
+      <Group gap="md" mt={-8}>
         <Anchor
           href="https://github.com/jolneetanky"
           target="_blank"
@@ -51,6 +51,8 @@ const TitleText = ({
   );
 };
 
+// This gives a consistent layout (title, subheader, content) of a page.
+// Refers to the page below the navbar.
 const PageLayout = ({
   content,
   title,
@@ -62,7 +64,7 @@ const PageLayout = ({
 }) => {
   return (
     <Center style={{ height: "100%", width: "100%" }}>
-      <Stack h="100%" w="100%" py="md">
+      <Stack h="100%" w="100%" py="xs" gap="md">
         <TitleText title={title} subheader={subheader} />
         <Box mt={-2}>{content}</Box>
       </Stack>

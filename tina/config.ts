@@ -1,4 +1,10 @@
 // tina/config.ts
+
+// NOTE:
+// When changing this file, always run `npm run dev`
+// to regenerate tina-lock.json before committing.
+// This syncs the schema with graphQL.
+
 import { defineConfig } from "tinacms";
 
 // Your hosting provider likely exposes this as an environment variable

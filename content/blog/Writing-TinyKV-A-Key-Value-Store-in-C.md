@@ -20,7 +20,7 @@ The WAL is essential for ensuring durability. Every write is immediately appende
 
 ### SSTable
 
-The core data structure on disk is the SSTable. An SSTable is really just a file that stores sorted
+The core data structure on disk is the SSTable. An SSTable is really just a file that stores key-value pairs in sorted order.
 
 **TODO:**
 

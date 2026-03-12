@@ -1,5 +1,7 @@
 ---
 title: A Quick Dive into Groovy
+createdAt: 2026-03-12T14:40:17.424Z
+updatedAt: 2026-03-12T14:39:57.107Z
 ---
 
 At my current internship, I got assigned to some DevOps tasks. A large part of the process involves writing Jenkinsfiles to automate the CI pipeline. I find it really boring, so I decided to dive into how Jenkinsfiles actually work. How is a Jenkinsfile, written in Groovy (a language that can be run on the JVM and is fully interoperable with Java), “understood” and parsed by the Jenkins Controller? How does Groovy syntax work? I document what I learned here.

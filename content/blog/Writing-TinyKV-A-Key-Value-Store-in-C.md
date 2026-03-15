@@ -71,9 +71,11 @@ Each LevelManager stores an in-memory representation of all SSTables in that lev
 
 The current in-memory SSTable representation is intentionally naive and built for learning rather than scale. It eagerly loads the full dataset into memory and scans them, which is fine for small, toy datasets but doesn't scale for real-world production usage. There are a few things we can do so that TinyKV can handle large amounts of data:
 
-1. Don't load the full SSTable and its entries into memory. Instead, create an index for each SSTable. The index maps each key to its byte offset within the file. We can store the index on disk, and only fetch it when needed.
-   1. Index maps each key to its byte offset within the file.
-2. Split up each SSTable into blocks. A block is the smallest unit of memory in the system, and it can be cached in a separate buffer pool, and fetched from disk when needed.
+1. Don't load the full SSTable and its entries into memory. Instead, create an index for each SSTable. The index maps each key to its byte offset within the file. We can store the index on disk, and only fetch it when needed. Now, each Get(key) operation involves
+2. Split up each SSTable into blocks. A block is the smallest unit of memory in the system, and it can be cached in a separate buffer pool, and fetched from disk when needed. This is similar to how PostgreSQL manages memory.
+3. Block + block index
+   1. Each SSTable has a block index, mapping blockStartKey → blockOffset. When searching for a particular key, first load the blockIndex into memory, and perform a binary search to identify the block that potentially stores the key.
+   2. Each block is guaranteed to be able to fit in memory. Once we have identified our target block, seek to the block's starting byte offset. After a block is read into memory, perform binary search on the entries to find the key.
 
 ## Future improvements
 

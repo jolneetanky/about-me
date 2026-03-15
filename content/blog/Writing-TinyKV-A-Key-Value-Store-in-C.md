@@ -8,7 +8,7 @@ updatedAt: 2026-03-11T17:11:51.069Z
 
 I wrote this key-value store as an introductory project to C++. I was inspired by a friend and decided to implement it myself. You can check out his blog post [here](https://mraihan.dev/blog/LSM-tree-Key-Value-Store-in-CPP).
 
-## High-Level Design
+## High-level design
 
 ![](</images/Screenshot 2026-03-15 at 9.47.54 PM.png>)
 
@@ -20,7 +20,7 @@ The key-value store has a simple API:
 2. Get(key): Returns (key, val) if it exists and hasn't been deleted. Otherwise, raise a KeyError.
 3. Del(key): Deletes the key if it exists, else raise a KeyError.
 
-## Key Components
+## Key components
 
 ### MemTable
 
@@ -74,6 +74,12 @@ The current in-memory SSTable representation is intentionally naive and built fo
 1. Don't load the full SSTable and its entries into memory. Instead, create an index for each SSTable. The index maps each key to its byte offset within the file. We can store the index on disk, and only fetch it when needed.
    1. Index can map each key to its byte offset within the file. 
 2. Split up each SSTable into blocks. A block is the smallest unit of memory in the system, and it can be cached in a separate buffer pool, and fetched from disk when needed.
+
+## Future improvements
+
+1. Implement per-SSTable index.
+2. Implement block-based SSTables + block caching (With eg. clock replacement strategy)
+3. Benchmark its performance against LevelDB for different workloads.
 
 ## References
 

@@ -22,15 +22,15 @@ The key-value store has a simple API:
 
 ## Key components
 
-### MemTable
+### 1) MemTable
 
 Writes go directly to the MemTable. When the MemTable gets full, it is flushed to disk via fsync(). The MemTable remains sorted on insertion so that we incur no sorting cost when flushing to disk.
 
-### Write-Ahead Log (WAL)
+### 2) Write-Ahead Log (WAL)
 
 The WAL is essential for ensuring durability. Every write is immediately appended to the WAL. Only after memTable.flush() is the WAL cleared. If the database crashes, the WAL will be replayed on startup to build the memtable.
 
-### SSTable
+### 3) SSTable
 
 The core data structure on disk is the SSTable. An SSTable is just a file that stores key-value pairs in sorted order. It is immutable once written to disk. The purpose of this is to enable fast, append-only writes; outdated entries will eventually be overwritten during the background compaction process. The compaction process 
 
@@ -65,9 +65,9 @@ The API is the same as that of LevelDB's iterators:
 
 When searching for a particular key, the StorageManager queries each LevelManager from level 0 to the bottom-most level if the key exists. Each LevelManager is just a thin wrapper that stores the in-memory representation of the SSTables in that level. For each SSTable within the level, we create an `SSTableIterator`, and use `SSTableIterator.seek(key)` to search for the key in the SSTable. If the key exists, we return it, otherwise we move on to the next SSTable within the level. If the key isn't found in level L, the StorageManager continues its search in the next level, L+1.
 
-My current implementation naively stores the SSTables in-memory as `std::vector<std::unique_ptr<SSTable»`
+Each LevelManager stores an in-memory representation of all SSTables in that level, inside an `std::vector<std::unique_ptr<SSTable»`. Each SSTable is heap-allocated, and there is exactly one instance of an SSTable in the heap at any point in time. I used `std::unique_ptr<SSTable>` to enforce ownership semantics, ie. that the SSTable is owned by the LevelManager of the level it belongs to. 
 
-. Each SSTable is heap-allocated, and there is exactly one instance of an SSTable in the heap at any point in time. We used a `std::unique_ptr` to enforce ownership semantics, ie. that the SSTable is owned by the LevelManager of the level it belongs to. 
+#### In-memory representation
 
 The current in-memory SSTable representation is intentionally naive and built for learning rather than scale. It eagerly loads the full dataset into memory and scans them, which is fine for small, toy datasets but doesn't scale for real-world production usage. There are a few things we can do so that TinyKV can handle large amounts of data:
 

@@ -32,7 +32,7 @@ The WAL is essential for ensuring durability. Every write is immediately appende
 
 ### 3) SSTable
 
-The core data structure on disk is the SSTable. An SSTable is just a file that stores key-value pairs in sorted order. It is immutable once written to disk. The purpose of this is to enable fast, append-only writes; outdated entries will eventually be overwritten during the background compaction process. The compaction process 
+The core data structure on disk is the SSTable. An SSTable is just a file that stores key-value pairs in sorted order. It is immutable once written to disk. The purpose of this is to enable fast, append-only writes; outdated entries will eventually be overwritten during the background compaction process. The compaction process
 
 The disk layout of an SSTable is as such:
 
@@ -65,7 +65,7 @@ The API is the same as that of LevelDB's iterators:
 
 When searching for a particular key, the StorageManager queries each LevelManager from level 0 to the bottom-most level if the key exists. Each LevelManager is just a thin wrapper that stores the in-memory representation of the SSTables in that level. For each SSTable within the level, we create an `SSTableIterator`, and use `SSTableIterator.seek(key)` to search for the key in the SSTable. If the key exists, we return it, otherwise we move on to the next SSTable within the level. If the key isn't found in level L, the StorageManager continues its search in the next level, L+1.
 
-Each LevelManager stores an in-memory representation of all SSTables in that level, inside an `std::vector<std::unique_ptr<SSTable»`. Each SSTable is heap-allocated, and there is exactly one instance of an SSTable in the heap at any point in time. I used `std::unique_ptr<SSTable>` to enforce ownership semantics, ie. that the SSTable is owned by the LevelManager of the level it belongs to. 
+Each LevelManager stores an in-memory representation of all SSTables in that level, inside an `std::vector<std::unique_ptr<SSTable»`. Each SSTable is heap-allocated, and there is exactly one instance of an SSTable in the heap at any point in time. I used `std::unique_ptr<SSTable>` to enforce ownership semantics, ie. that the SSTable is owned by the LevelManager of the level it belongs to.
 
 #### In-memory representation
 
@@ -73,8 +73,8 @@ The current in-memory SSTable representation is intentionally naive and built fo
 
 1. Don't load the full SSTable and its entries into memory. Instead, create an index for each SSTable. The index maps each key to its byte offset within the file. We can store the index on disk, and only fetch it when needed. Now, each Get(key) operation involves
 2. Split up each SSTable into blocks. A block is the smallest unit of memory in the system, and it can be cached in a separate buffer pool, and fetched from disk when needed. This is similar to how PostgreSQL manages memory.
-3. Block + block index
-   1. Each SSTable has a block index, mapping blockStartKey → blockOffset. When searching for a particular key, first load the blockIndex into memory, and perform a binary search to identify the block that potentially stores the key.
+3. Block + block index - Instead of one index entry for every key, map one index entry for every SSTable **block**.
+   1. Each SSTable has a block index, mapping `blockStartKey → blockOffset`. When searching for a particular key, first load the blockIndex into memory, and perform a binary search to identify the block that potentially stores the key.
    2. Each block is guaranteed to be able to fit in memory. Once we have identified our target block, seek to the block's starting byte offset. After a block is read into memory, perform binary search on the entries to find the key.
 
 ## Future improvements

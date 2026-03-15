@@ -72,7 +72,7 @@ Each LevelManager stores an in-memory representation of all SSTables in that lev
 The current in-memory SSTable representation is intentionally naive and built for learning rather than scale. It eagerly loads the full dataset into memory and scans them, which is fine for small, toy datasets but doesn't scale for real-world production usage. There are a few things we can do so that TinyKV can handle large amounts of data:
 
 1. Don't load the full SSTable and its entries into memory. Instead, create an index for each SSTable. The index maps each key to its byte offset within the file. We can store the index on disk, and only fetch it when needed.
-   1. Index can map each key to its byte offset within the file. 
+   1. Index maps each key to its byte offset within the file.
 2. Split up each SSTable into blocks. A block is the smallest unit of memory in the system, and it can be cached in a separate buffer pool, and fetched from disk when needed.
 
 ## Future improvements
@@ -84,3 +84,4 @@ The current in-memory SSTable representation is intentionally naive and built fo
 ## References
 
 1. [https://github.com/google/leveldb](https://github.com/google/leveldb)
+2. [https://medium.com/@satviknema/implementing-lsm-based-key-value-store-in-java-from-scratch-46c1b23d6924](https://medium.com/@satviknema/implementing-lsm-based-key-value-store-in-java-from-scratch-46c1b23d6924)

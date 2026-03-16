@@ -73,17 +73,18 @@ The current in-memory SSTable representation is intentionally naive and built fo
 
 1. Don't load the full SSTable and its entries into memory. Instead, create an index for each SSTable. The index maps each key to its byte offset within the file. We can store the index on disk, and only fetch it when needed. Now, each Get(key) operation involves
    1. For each Get(key), memory usage = O(number of keys).
-2. Split up each SSTable into blocks. A block is the smallest unit of memory in the system, and it can be cached in a separate buffer pool, and fetched from disk when needed. This is similar to how PostgreSQL manages memory.
+2. Split up each SSTable into blocks. A block is the smallest unit of memory in the system, and it can be cached in a separate buffer pool, and fetched from disk when needed. This is similar to how PostgreSQL manages memory. Using a buffer pool ensures the number of pages from disk that's loaded into memory is capped, preventing issues like out-of-memory (OOM) errors, and overwhelming the OS' page cache.
 3. Block + block index - Instead of one index entry for every key, map one index entry for every SSTable **block**.
    1. Each SSTable has a block index, mapping `blockStartKey → blockOffset`. When searching for a particular key, first load the blockIndex into memory, and perform a binary search to identify the block that potentially stores the key.
    2. Each block is guaranteed to be able to fit in memory. Once we have identified our target block, seek to the block's starting byte offset. After a block is read into memory, perform binary search on the entries to find the key.
    3. For each Get(key), memory usage = O(number of blocks + block size).
 
-## Future improvements
+## Future features / improvements
 
 1. Implement per-SSTable index.
 2. Implement block-based SSTables + block caching (With eg. clock replacement strategy)
-3. Benchmark its performance against LevelDB for different workloads.
+3. Implement concurrency - allow n readers for each SSTable (as SStables are immutable). MemTable needs to support concurrent readers and writers. For example a lock-based single-writer/multipler-reader MemTable, or maybe even a lock-free implementation (which I will have to read up on).
+4. Benchmark performance against LevelDB for different workloads.
 
 ## References
 

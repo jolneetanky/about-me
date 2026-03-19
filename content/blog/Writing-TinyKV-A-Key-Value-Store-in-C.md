@@ -73,7 +73,7 @@ The current in-memory SSTable representation is intentionally naive and built fo
 
 1. Don't load the full SSTable and its entries into memory. Instead, create an index for each SSTable. The index maps each key to its byte offset within the file. We can store the index on disk, and only fetch it when needed. Now, each Get(key) operation involves:
    1. For each SSTable searched, perform binary search on the index to locate the key. If the key isn't found, move on to the next SSTable index.
-   2. If the key is found, access they key-value pair from the byte offset of the SSTable's file descriptor fd. We can do this either via mmap() or pread(fd, buf, num\_bytes, offset).
+   2. If the key is found, access the key-value pair from the byte offset of the SSTable's file descriptor fd. We can do this either via mmap() or pread(fd, buf, num\_bytes, offset).
 
       ———————————————————————————————————————————————————————————————————
       When to use mmap() vs pread()?\

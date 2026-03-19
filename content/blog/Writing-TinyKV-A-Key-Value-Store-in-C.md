@@ -48,7 +48,7 @@ The disk layout of an SSTable is as such:
 
 This iterator is used by higher-level components (eg. LevelManager) to traverse the entries in an SSTable, without needing to know details such as which parts of the SSTable live on disk/in-memory, what caching strategies are used, how each Entry is laid out on disk/in-memory.
 
-A core assumption / invariant is that SSTables are never empty. It will always have $>=$ 1 entry.
+A core assumption / invariant is that SSTables are never empty. It will always have ≥ 1 entry.
 
 The API is the same as that of LevelDB's iterators:
 
@@ -71,8 +71,22 @@ Each LevelManager stores an in-memory representation of all SSTables in that lev
 
 The current in-memory SSTable representation is intentionally naive and built for learning rather than scale. It eagerly loads the full dataset into memory and scans them, which is fine for small, toy datasets but doesn't scale for real-world production usage. There are a few things we can do so that TinyKV can handle large amounts of data:
 
-1. Don't load the full SSTable and its entries into memory. Instead, create an index for each SSTable. The index maps each key to its byte offset within the file. We can store the index on disk, and only fetch it when needed. Now, each Get(key) operation involves
-   1. For each Get(key), memory usage = O(number of keys).
+1. Don't load the full SSTable and its entries into memory. Instead, create an index for each SSTable. The index maps each key to its byte offset within the file. We can store the index on disk, and only fetch it when needed. Now, each Get(key) operation involves:
+   1. For each SSTable searched, perform binary search on the index to locate the key. If the key isn't found, move on to the next SSTable index.
+   2. If the key is found, access they key-value pair from the byte offset of the SSTable's file descriptor fd. We can do this either via mmap() or pread(fd, buf, num\_bytes, offset).
+
+      ———————————————————————————————————————————————————————————————————
+      When to use mmap() vs pread()?\
+      `mmap()`:\
+      \- Maps the contents of the file directly into the process' virtual address space, so we can read the required byte offset directly from memory.\
+      \- Paging, caching, page eviction etc. are left up to the OS.\
+      \- Simple, but offers less control over whether contents of a file are cached and when it's evicted to disk.\
+      \
+      `pread()`:\
+      \- OS copies `n` bytes from the `fd` into the given `buffer`.\
+      \- This `buffer` is managed by the programmer - the programmer can choose to cache it, reuse it, etc. Offers more control over memory.
+      ———————————————————————————————————————————————————————————————————
+
 2. Split up each SSTable into blocks. A block is the smallest unit of memory in the system, and it can be cached in a separate buffer pool, and fetched from disk when needed. This is similar to how PostgreSQL manages memory. Using a buffer pool ensures the number of pages from disk that's loaded into memory is capped, preventing issues like out-of-memory (OOM) errors, and overwhelming the OS' page cache.
 3. Block + block index - Instead of one index entry for every key, map one index entry for every SSTable **block**.
    1. Each SSTable has a block index, mapping `blockStartKey → blockOffset`. When searching for a particular key, first load the blockIndex into memory, and perform a binary search to identify the block that potentially stores the key.

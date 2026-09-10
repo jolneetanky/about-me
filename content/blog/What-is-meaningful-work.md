@@ -1,5 +1,7 @@
 ---
 title: What is meaningful work
+createdAt: 2026-09-06T16:08:51.749Z
+updatedAt: 2026-09-06T16:08:58.865Z
 ---
 
 note to self: create a different category for this kind of short form posts / thoughts, maybe.

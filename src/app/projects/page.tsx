@@ -150,6 +150,10 @@ const ProjectCard = ({ project }: { project: Project }): JSX.Element => {
 };
 
 const Projects = ({ projects }: { projects: Project[] }): JSX.Element => {
+  if (projects.length === 0) {
+    return <>This section is in progress :-)</>;
+  }
+
   return (
     <SimpleGrid cols={{ base: 1, sm: 2, lg: 3 }} spacing="lg">
       {projects.map((p, idx) => (
